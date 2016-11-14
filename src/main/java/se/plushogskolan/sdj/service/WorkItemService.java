@@ -1,10 +1,15 @@
 package se.plushogskolan.sdj.service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import se.plushogskolan.sdj.model.Status;
@@ -48,13 +53,13 @@ public class WorkItemService {
 	}
 	
 	@Transactional
-	public boolean updateStatus(Long id, WorkItemStatus status){
+	public WorkItem updateStatus(Long id, WorkItemStatus status){
 		WorkItem workItem=workItemRepository.findOne(id);
 		if(workItem==null)
-			return false;
+			throw new ServiceException("Update status failed. WorkItem with id:"+id+" is null");
 		workItem.setStatus(status.toString());
 		workItemRepository.save(workItem); 
-		return true;
+		return workItem;
 	}
 
 	@Transactional
@@ -101,5 +106,16 @@ public class WorkItemService {
 		else{
 			return false;
 		}
+	}
+	
+	public Page<WorkItem> findAllWorkItems(){
+		Pageable pageable = new PageRequest(0,10,Sort.Direction.DESC, "updatedDate");
+		return workItemRepository.findAll(pageable);
+	}
+	
+	public Page<WorkItem> findUpdatedWorkItem(ZonedDateTime start,ZonedDateTime end){
+		Pageable pageable = new PageRequest(0,10,Sort.Direction.DESC,"updatedDate");
+		return workItemRepository .findUpdatedWorkItem(start, end,pageable);
+		//return workItemRepository .findUpdatedWorkItem(pageable);
 	}
 }

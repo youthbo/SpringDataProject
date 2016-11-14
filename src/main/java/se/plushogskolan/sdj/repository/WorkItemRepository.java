@@ -1,14 +1,18 @@
 package se.plushogskolan.sdj.repository;
 
-import org.springframework.data.jpa.repository.Query;
+import java.time.ZonedDateTime;
 import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import se.plushogskolan.sdj.model.User;
 import se.plushogskolan.sdj.model.WorkItem;
 
-public interface WorkItemRepository extends CrudRepository<WorkItem, Long> {
+public interface WorkItemRepository extends PagingAndSortingRepository<WorkItem, Long> {
 
 	List<WorkItem> findAllByStatus(String status);
 
@@ -22,4 +26,8 @@ public interface WorkItemRepository extends CrudRepository<WorkItem, Long> {
 
 	@Query("select w from WorkItem w where w.user.team.name=:teamName")
 	List<WorkItem> findAllByTeamName(@Param("teamName") String teamName);
+	
+	@Query("select w from WorkItem w where w.status='Done' and w.updatedDate>:start and w.updatedDate <:end")
+	Page<WorkItem> findUpdatedWorkItem(@Param("start")ZonedDateTime start,@Param("end")ZonedDateTime end,Pageable pageable);
+	//Page<WorkItem> findUpdatedWorkItem(Pageable pageable);
 }

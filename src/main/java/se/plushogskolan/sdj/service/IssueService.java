@@ -5,6 +5,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import se.plushogskolan.sdj.model.WorkItem;
@@ -109,6 +113,11 @@ public class IssueService {
 		} catch (Exception e) {
 			throw new ServiceException("Could not get issue with id:" + id, e);
 		}
+	}
+	
+	public Page<Issue> findAllIssue(){
+		Pageable pageable = new PageRequest(0,10,Sort.Direction.ASC,"description");
+		return issueRepository.findAll(pageable);
 	}
 
 }

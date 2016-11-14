@@ -5,13 +5,17 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import se.plushogskolan.sdj.model.Status;
 import se.plushogskolan.sdj.model.Team;
 import se.plushogskolan.sdj.model.User;
 import se.plushogskolan.sdj.model.WorkItem;
 import se.plushogskolan.sdj.model.WorkItemStatus;
-import se.plushogskolan.sdj.model.Status;
 import se.plushogskolan.sdj.repository.TeamRepository;
 import se.plushogskolan.sdj.repository.UserRepository;
 import se.plushogskolan.sdj.repository.WorkItemRepository;
@@ -98,6 +102,11 @@ public class UserService {
 	public User activateUser(User user) {
 		user.setStatus(Status.ACTIVE);
 		return userRepository.save(user);
+	}
+	
+	public Page<User> findAllUsers(){
+		Pageable pageable = new PageRequest(0,10,Sort.Direction.ASC,"firstname","lastname");
+		return userRepository.findAll(pageable);
 	}
 
 }
