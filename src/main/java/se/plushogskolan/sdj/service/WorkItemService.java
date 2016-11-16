@@ -32,17 +32,17 @@ public class WorkItemService {
 		return workItemRepository.findAllByTeamName(name);
 	}
 	
-	@Transactional
+	
 	public List<WorkItem> findAllByStatus(WorkItemStatus status){
 		return this.workItemRepository.findAllByStatus(status.toString());
 	}
 
-	@Transactional
+	
 	public List<WorkItem> findAllByUser(Long userId){
 		return this.workItemRepository.findAllByUser(userId);
 	}
 
-	@Transactional
+	
 	public List<WorkItem> findAllByUser(User user){
 		return this.workItemRepository.findAllByUser(user);
 	}
