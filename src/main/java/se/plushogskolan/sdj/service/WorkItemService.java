@@ -63,15 +63,15 @@ public class WorkItemService {
 	}
 
 	@Transactional
-	public boolean delete(Long id){
+	public WorkItem delete(Long id){
 		WorkItem workItem=workItemRepository.findOne(id);
-		if(workItem==null)
-			return false;
-		workItemRepository.delete(workItem);
-		return true;
+		if(workItem!=null)
+			workItemRepository.delete(workItem);
+		return workItem;
+		
 	}
 	
-	public boolean delete(WorkItem workItem){
+	public WorkItem delete(WorkItem workItem){
 		return delete(workItem.getId());
 	}
 	

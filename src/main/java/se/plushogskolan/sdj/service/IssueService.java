@@ -33,9 +33,8 @@ public class IssueService {
 	@Transactional
 	public Issue createIssue(Issue issue) {
 		try {
-		  if (issue.getId()==null){
-			Issue newIssue = issueRepository.save(issue);
-			return newIssue;
+		  if (issue.getId()==null){		 
+			return issueRepository.save(issue);
 		  }else{
 			  throw new ServiceException("Create issue " + issue.getDescription() + " failed. Issue already exists");
 		  }
@@ -77,10 +76,6 @@ public class IssueService {
 				newIssue = issueRepository.save(issue);
 			}
 			Issue findIssue = issueRepository.findByDescription(new_description);
-			if (!issueRepository.exists(issue.getId())) {
-				throw new ServiceException(
-						"Could not update issue.Issue:" + issue.getDescription() + " doesn't exist.");
-			}
 			if (findIssue == null) {
 				newIssue.setDescription(new_description);
 				issueRepository.save(newIssue);
