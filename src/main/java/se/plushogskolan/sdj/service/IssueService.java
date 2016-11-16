@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,7 @@ public class IssueService {
 		  }else{
 			  throw new ServiceException("Create issue " + issue.getDescription() + " failed. Issue already exists");
 		  }
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Create issue " + issue.getDescription() + " failed", e);
 		}
         
@@ -62,7 +63,7 @@ public class IssueService {
 			} else {
 				throw new ServiceException("Assign issue to work item failed. Status of work item is not 'Done'");
 			}
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not assign issue to work item", e);
 		}
 
@@ -86,33 +87,22 @@ public class IssueService {
 				return newIssue;
 			} else
 				throw new ServiceException("Issue with name:" + new_description + " already exists.");
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not update issue with id:" + issue.getId(), e);
 		}
 	}
 
 	public List<WorkItem> getAllItemsWithIssue(Issue issue) {
-		try {
-			return issueRepository.findAllByIssue(issue);
-		} catch (Exception e) {
-			throw new ServiceException("Could not get all items with issue:" + issue.getDescription(), e);
-		}
+			return issueRepository.findAllByIssue(issue);		
 	}
 
 	public Issue getIssueByName(String name) {
-		try {
-			return issueRepository.findByDescription(name);
-		} catch (Exception e) {
-			throw new ServiceException("Could not get issue with name:" + name, e);
-		}
+		return issueRepository.findByDescription(name);
+
 	}
 	
 	public Issue getIssueById(Long id){
-		try {
 			return issueRepository.findOne(id);
-		} catch (Exception e) {
-			throw new ServiceException("Could not get issue with id:" + id, e);
-		}
 	}
 	
 	public Page<Issue> findAllIssue(){

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import se.plushogskolan.sdj.service.ServiceException;
@@ -37,27 +38,18 @@ public class TeamService {
 				throw new ServiceException("Team with this teamname already exists");
 			}
 
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not add team: " + team.getName(), e);
 		}
 	}
 
 	public Iterable<Team> findAllTeams() {
-		try {
 			return teamRepository.findAll();
-		} catch (Exception e) {
-			throw new ServiceException("Could not get all teams ", e);
-		}
 	}
 
 	public Team findByName(String teamName) {
-		try {
 			Team team = teamRepository.findByName(teamName);
 			return team;
-
-		} catch (Exception e) {
-			throw new ServiceException("Could not get  team "+ teamName, e);
-		}
 	}
 
 	@Transactional
@@ -77,7 +69,7 @@ public class TeamService {
 				throw new ServiceException("Team with this teamname: " + oldName + "NOT exists");
 			}
 
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not update team", e);
 		}
 	}
@@ -94,7 +86,7 @@ public class TeamService {
 				throw new ServiceException("Team with this teamname NOT exists");
 			}
 
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not deactivate team: " + teamName, e);
 		}
 
@@ -120,7 +112,7 @@ public class TeamService {
 				throw new ServiceException("Team with this teamId NOT exists OR User NOT exists");
 			}
 
-		} catch (Exception e) {
+		} catch (DataAccessException e) {
 			throw new ServiceException("Could not update team", e);
 		}
 	}

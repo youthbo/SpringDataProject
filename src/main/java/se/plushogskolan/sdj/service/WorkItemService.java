@@ -100,12 +100,7 @@ public class WorkItemService {
 	 * @return
      */
 	public boolean checkNumberofWorkItems(User user){
-		if(this.workItemRepository.findAllByUser(user).size() < 5){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return this.workItemRepository.findAllByUser(user).size() < 5;
 	}
 	
 	public Page<WorkItem> findAllWorkItems(){
@@ -116,6 +111,5 @@ public class WorkItemService {
 	public Page<WorkItem> findUpdatedWorkItem(ZonedDateTime start,ZonedDateTime end){
 		Pageable pageable = new PageRequest(0,10,Sort.Direction.DESC,"updatedDate");
 		return workItemRepository .findUpdatedWorkItem(start, end,pageable);
-		//return workItemRepository .findUpdatedWorkItem(pageable);
 	}
 }
