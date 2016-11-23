@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,17 +21,23 @@ import se.plushogskolan.sdj.repository.WorkItemRepository;
 
 @Service
 public class UserService {
-
-	private final UserRepository userRepository;
-	private final TeamRepository teamRepository;
-	private final WorkItemRepository workItemRepository;
-
 	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private TeamRepository teamRepository;
+	@Autowired
+	private WorkItemRepository workItemRepository;
+
+	
 	public UserService(UserRepository userRepository, TeamRepository teamRepository,
 			WorkItemRepository workItemRepository) {
 		this.userRepository = userRepository;
 		this.teamRepository = teamRepository;
 		this.workItemRepository = workItemRepository;
+	}
+
+	//used in testConfig file, for autowired in test
+	public UserService() {
 	}
 
 	public User getUser(Long Id) {
@@ -69,7 +74,7 @@ public class UserService {
 			}
 
 		} else
-			throw new ServiceException("Username must be atleast 10 characters long!");
+			throw new ServiceException("Username must be at least 10 characters long!");
 	}
 
 	@Transactional
@@ -104,9 +109,9 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public Page<User> findAllUsers(){
-		Pageable pageable = new PageRequest(0,10,Sort.Direction.ASC,"firstname","lastname");
-		return userRepository.findAll(pageable);
+	public List<User> findAllUsers(int page,int amount){
+		Pageable pageable = new PageRequest(page,amount,Sort.Direction.ASC,"firstname","lastname");
+		return userRepository.findAll(pageable).getContent();
 	}
 
 }

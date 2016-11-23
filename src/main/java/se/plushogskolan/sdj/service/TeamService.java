@@ -17,14 +17,18 @@ import se.plushogskolan.sdj.repository.UserRepository;
 
 @Service
 public class TeamService {
-
+	@Autowired
 	private TeamRepository teamRepository;
+	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
 	public TeamService(TeamRepository teamRepository, UserRepository userRepository) {
 		this.teamRepository = teamRepository;
 		this.userRepository = userRepository;
+	}
+
+	//used in testConfig file, for autowired in test
+	public TeamService() {
 	}
 
 	@Transactional

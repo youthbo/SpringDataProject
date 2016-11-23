@@ -6,7 +6,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,10 +19,10 @@ import se.plushogskolan.sdj.repository.WorkItemRepository;
 
 @Service
 public class WorkItemService {
-	
-	private final WorkItemRepository workItemRepository;
-
 	@Autowired
+	private WorkItemRepository workItemRepository;
+
+	
 	public WorkItemService(WorkItemRepository workItemRepository) {
 		this.workItemRepository = workItemRepository;
 	}
@@ -103,13 +102,13 @@ public class WorkItemService {
 		return this.workItemRepository.findAllByUser(user).size() < 5;
 	}
 	
-	public Page<WorkItem> findAllWorkItems(){
-		Pageable pageable = new PageRequest(0,10,Sort.Direction.DESC, "updatedDate");
-		return workItemRepository.findAll(pageable);
+	public List<WorkItem> findAllWorkItems(int page,int amount){
+		Pageable pageable = new PageRequest(page,amount,Sort.Direction.DESC, "updatedDate");
+		return workItemRepository.findAll(pageable).getContent();
 	}
 	
-	public Page<WorkItem> findUpdatedWorkItem(ZonedDateTime start,ZonedDateTime end){
+	public List<WorkItem> findFinishedWorkItem(ZonedDateTime start,ZonedDateTime end){
 		Pageable pageable = new PageRequest(0,10,Sort.Direction.DESC,"updatedDate");
-		return workItemRepository .findUpdatedWorkItem(start, end,pageable);
+		return workItemRepository.findFinishedWorkItem(start, end,pageable).getContent();
 	}
 }

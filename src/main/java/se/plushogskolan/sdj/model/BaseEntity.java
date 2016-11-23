@@ -30,4 +30,14 @@ public abstract class BaseEntity {
     public Long getId() {
 		return id;
 	}
+
+	public ZonedDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public ZonedDateTime getUpdatedDate() {
+		return updatedDate;
+	}
+    
+    
 }

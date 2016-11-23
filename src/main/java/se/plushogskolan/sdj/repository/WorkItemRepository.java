@@ -27,7 +27,6 @@ public interface WorkItemRepository extends PagingAndSortingRepository<WorkItem,
 	@Query("select w from WorkItem w where w.user.team.name=:teamName")
 	List<WorkItem> findAllByTeamName(@Param("teamName") String teamName);
 	
-	@Query("select w from WorkItem w where w.status='Done' and w.updatedDate>:start and w.updatedDate <:end")
-	Page<WorkItem> findUpdatedWorkItem(@Param("start")ZonedDateTime start,@Param("end")ZonedDateTime end,Pageable pageable);
-	//Page<WorkItem> findUpdatedWorkItem(Pageable pageable);
+	@Query("select w from WorkItem w where w.status='Done' and w.updatedDate>:start and w.updatedDate<:end")
+	Page<WorkItem> findFinishedWorkItem(@Param("start")ZonedDateTime start,@Param("end")ZonedDateTime end,Pageable pageable);
 }

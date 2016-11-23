@@ -6,25 +6,26 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import se.plushogskolan.sdj.model.Issue;
 import se.plushogskolan.sdj.model.WorkItem;
 import se.plushogskolan.sdj.model.WorkItemStatus;
-import se.plushogskolan.sdj.model.Issue;
 import se.plushogskolan.sdj.repository.IssueRepository;
 import se.plushogskolan.sdj.repository.WorkItemRepository;
 
 @Service
 public class IssueService {
 
+	@Autowired
 	private IssueRepository issueRepository;
+	@Autowired
 	private WorkItemRepository workItemRepository;
 
-	@Autowired
+	
 	public IssueService(IssueRepository issueRepository, WorkItemRepository workItemRepository) {
 		this.issueRepository = issueRepository;
 		this.workItemRepository = workItemRepository;
@@ -100,9 +101,9 @@ public class IssueService {
 			return issueRepository.findOne(id);
 	}
 	
-	public Page<Issue> findAllIssue(){
-		Pageable pageable = new PageRequest(0,10,Sort.Direction.ASC,"description");
-		return issueRepository.findAll(pageable);
+	public List<Issue> findAllIssue(int page,int amount){
+		Pageable pageable = new PageRequest(page,amount,Sort.Direction.ASC,"description");
+		return issueRepository.findAll(pageable).getContent();
 	}
 
 }
